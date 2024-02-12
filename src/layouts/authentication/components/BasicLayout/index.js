@@ -32,14 +32,16 @@ import Footer from "layouts/authentication/components/Footer";
 function BasicLayout({ image, children }) {
   return (
     <PageLayout>
-      <DefaultNavbar
+      {/* Elimina la línea siguiente para quitar la DefaultNavbar */}
+      {/* <DefaultNavbar
         action={{
           type: "external",
           route: "https://creative-tim.com/product/material-dashboard-react",
           label: "free download",
-          color: "dark",
         }}
-      />
+        transparent
+        light
+      /> */}
       <MDBox
         position="absolute"
         width="100%"
