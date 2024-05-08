@@ -13,7 +13,7 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import login from "../../../services/login"; // Ajusta la ruta según tu estructura de archivos
+import login from "../../../services/login";
 
 function Basic() {
   const [rememberMe, setRememberMe] = useState(false);
