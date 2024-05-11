@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
@@ -16,6 +17,7 @@ import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import login from "../../../services/login";
 
 function Basic() {
+  const navigate = useNavigate();
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,6 +30,7 @@ function Basic() {
       const response = await login(username, password);
       // Puedes manejar la respuesta según tus necesidades (por ejemplo, redirigir a otra página)
       console.log("Inicio de sesión exitoso:", response);
+      navigate("/dashboard");
     } catch (error) {
       // Puedes manejar los errores según tus necesidades (por ejemplo, mostrar un mensaje de error)
       console.error("Error al iniciar sesión:", error);
