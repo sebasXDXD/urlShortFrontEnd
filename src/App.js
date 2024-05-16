@@ -52,6 +52,7 @@ import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "co
 // Images
 import brandWhite from "assets/images/logo-ct.png";
 import brandDark from "assets/images/logo-ct-dark.png";
+import { useAuth } from "providers/AuthProvider";
 
 export default function App() {
   const [controller, dispatch] = useMaterialUIController();
@@ -108,7 +109,7 @@ export default function App() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
-
+  const { isAuthenticated } = useAuth();
   const getRoutes = (allRoutes) =>
     allRoutes.map((route) => {
       if (route.collapse) {
@@ -116,7 +117,22 @@ export default function App() {
       }
 
       if (route.route) {
-        return <Route exact path={route.route} element={route.component} key={route.key} />;
+        const ComponentToRender = route.component;
+        return route.protected ? (
+          <Route
+            key={route.key}
+            path={route.route}
+            element={
+              isAuthenticated() ? (
+                <ComponentToRender />
+              ) : (
+                <Navigate to="/authentication/sign-in" replace />
+              )
+            }
+          />
+        ) : (
+          <Route key={route.key} path={route.route} element={<ComponentToRender />} />
+        );
       }
 
       return null;

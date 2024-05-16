@@ -15,9 +15,11 @@ import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
 import login from "../../../services/login";
+import { useAuth } from "providers/AuthProvider"; // Importa useAuth
 
 function Basic() {
   const navigate = useNavigate();
+  const { login: authLogin, isAuthenticated } = useAuth(); // Usa useAuth para obtener login y isAuthenticated
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -28,14 +30,20 @@ function Basic() {
     try {
       // Llamada a la función de inicio de sesión con las credenciales
       const response = await login(username, password);
-      // Puedes manejar la respuesta según tus necesidades (por ejemplo, redirigir a otra página)
-      console.log("Inicio de sesión exitoso:", response);
+      // Guarda el token en el contexto de autenticación
+      authLogin(response.token);
+      // Redirige al usuario al dashboard
       navigate("/dashboard");
     } catch (error) {
       // Puedes manejar los errores según tus necesidades (por ejemplo, mostrar un mensaje de error)
       console.error("Error al iniciar sesión:", error);
     }
   };
+
+  // Si el usuario ya está autenticado, redirige al dashboard
+  if (isAuthenticated()) {
+    navigate("/dashboard");
+  }
 
   return (
     <BasicLayout image={bgImage}>
