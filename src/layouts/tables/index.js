@@ -1,21 +1,7 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // @mui material components
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
+import { useState, useEffect } from "react"; // Importa useEffect
 
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
@@ -31,9 +17,46 @@ import DataTable from "examples/Tables/DataTable";
 import authorsTableData from "layouts/tables/data/authorsTableData";
 import projectsTableData from "layouts/tables/data/projectsTableData";
 
+// Importa la función getLinks
+import { getLinks } from "../../services/links";
+
 function Tables() {
-  const { columns, rows } = authorsTableData();
   const { columns: pColumns, rows: pRows } = projectsTableData();
+  const [linksData, setLinksData] = useState([]);
+  const columns = [
+    { Header: "ID", accessor: "id", width: "10%" },
+    { Header: "Name", accessor: "name", width: "20%" },
+    { Header: "Redirect To", accessor: "redirect_to", width: "40%" },
+    { Header: "Created At", accessor: "created_at", width: "20%" },
+    { Header: "User ID", accessor: "user_created_id", width: "10%" },
+  ];
+
+  // Usa useEffect para cargar los datos cuando el componente se monte
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getLinks();
+        setLinksData(data); // Guarda los datos en el estado
+      } catch (error) {
+        console.error("Error fetching links:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  // Transforma los datos para el DataTable
+  const rows = linksData.map((link) => ({
+    id: link.id,
+    name: (
+      <a href={link.redirect_to} target="_blank" rel="noopener noreferrer">
+        {link.name}
+      </a>
+    ),
+    redirect_to: link.redirect_to,
+    created_at: new Date(link.created_at).toLocaleString(),
+    user_created_id: link.user_created_id,
+  }));
 
   return (
     <DashboardLayout>
@@ -53,7 +76,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Authors Table
+                  Links
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
@@ -80,7 +103,7 @@ function Tables() {
                 coloredShadow="info"
               >
                 <MDTypography variant="h6" color="white">
-                  Projects Table
+                  Pages
                 </MDTypography>
               </MDBox>
               <MDBox pt={3}>
