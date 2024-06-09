@@ -2,7 +2,8 @@
 import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import { useState, useEffect } from "react"; // Importa useEffect
-
+import MDButton from "components/MDButton";
+import CreateLink from "components/CreateLink";
 // Material Dashboard 2 React components
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
@@ -23,6 +24,10 @@ import { getLinks } from "../../services/links";
 function Tables() {
   const { columns: pColumns, rows: pRows } = projectsTableData();
   const [linksData, setLinksData] = useState([]);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   const columns = [
     { Header: "ID", accessor: "id", width: "10%" },
     { Header: "Name", accessor: "name", width: "20%" },
@@ -79,14 +84,19 @@ function Tables() {
                   Links
                 </MDTypography>
               </MDBox>
-              <MDBox pt={3}>
-                <DataTable
-                  table={{ columns, rows }}
-                  isSorted={false}
-                  entriesPerPage={false}
-                  showTotalEntries={false}
-                  noEndBorder
-                />
+              <MDBox pt={3} px={2}>
+                <MDButton color="primary" variant="contained" onClick={handleOpen}>
+                  Crear Nuevo Acortador
+                </MDButton>
+                <MDBox pt={3}>
+                  <DataTable
+                    table={{ columns, rows }}
+                    isSorted={false}
+                    entriesPerPage={false}
+                    showTotalEntries={false}
+                    noEndBorder
+                  />
+                </MDBox>
               </MDBox>
             </Card>
           </Grid>
@@ -120,6 +130,7 @@ function Tables() {
         </Grid>
       </MDBox>
       <Footer />
+      <CreateLink open={open} handleClose={handleClose} />
     </DashboardLayout>
   );
 }
