@@ -9,6 +9,7 @@ import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import SignOut from "layouts/authentication/sign-out";
+import Redirector from "layouts/redirector";
 const routes = [
   {
     type: "collapse",
@@ -91,6 +92,15 @@ const routes = [
     route: "/authentication/sign-out",
     component: SignOut,
     protected: true, // Ruta no protegida
+  },
+  {
+    type: "collapse",
+    name: "Redirector",
+    key: "redirector",
+    route: "/redirect/:link",
+    icon: <Icon fontSize="small">login</Icon>,
+    component: Redirector,
+    protected: false, // Ruta no protegida
   },
 ];
 
