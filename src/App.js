@@ -13,7 +13,7 @@ Coded by www.creative-tim.com
 * The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
 */
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 
 // react-router components
 import { Routes, Route, Navigate, useLocation } from "react-router-dom";
@@ -47,7 +47,7 @@ import createCache from "@emotion/cache";
 import routes from "routes";
 
 // Material Dashboard 2 React contexts
-import { useMaterialUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import { useMaterialUIController, setOpenConfigurator } from "context";
 
 // Images
 import brandWhite from "assets/images/logo-ct.png";
@@ -67,23 +67,12 @@ export default function App() {
     darkMode,
   } = controller;
   const [onMouseEnter, setOnMouseEnter] = useState(false);
-  const [rtlCache, setRtlCache] = useState(null);
   const { pathname } = useLocation();
-
-  // Cache for the rtl
-  useMemo(() => {
-    const cacheRtl = createCache({
-      key: "rtl",
-      stylisPlugins: [rtlPlugin],
-    });
-
-    setRtlCache(cacheRtl);
-  }, []);
+  const { isAuthenticated } = useAuth();
 
   // Open sidenav when mouse enter on mini sidenav
   const handleOnMouseEnter = () => {
     if (miniSidenav && !onMouseEnter) {
-      setMiniSidenav(dispatch, false);
       setOnMouseEnter(true);
     }
   };
@@ -91,7 +80,6 @@ export default function App() {
   // Close sidenav when mouse leave mini sidenav
   const handleOnMouseLeave = () => {
     if (onMouseEnter) {
-      setMiniSidenav(dispatch, true);
       setOnMouseEnter(false);
     }
   };
@@ -109,34 +97,9 @@ export default function App() {
     document.documentElement.scrollTop = 0;
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
-  const { isAuthenticated } = useAuth();
-  const getRoutes = (allRoutes) =>
-    allRoutes.map((route) => {
-      if (route.collapse) {
-        return getRoutes(route.collapse);
-      }
 
-      if (route.route) {
-        const ComponentToRender = route.component;
-        return route.protected ? (
-          <Route
-            key={route.key}
-            path={route.route}
-            element={
-              isAuthenticated() ? (
-                <ComponentToRender />
-              ) : (
-                <Navigate to="/authentication/sign-in" replace />
-              )
-            }
-          />
-        ) : (
-          <Route key={route.key} path={route.route} element={<ComponentToRender />} />
-        );
-      }
-
-      return null;
-    });
+  // Cache for the rtl (removed because no longer needed)
+  const rtlCache = null;
 
   const configsButton = (
     <MDBox
@@ -162,32 +125,7 @@ export default function App() {
     </MDBox>
   );
 
-  return direction === "rtl" ? (
-    <CacheProvider value={rtlCache}>
-      <ThemeProvider theme={darkMode ? themeDarkRTL : themeRTL}>
-        <CssBaseline />
-        {layout === "dashboard" && (
-          <>
-            <Sidenav
-              color={sidenavColor}
-              brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-              brandName="Material Dashboard 2"
-              routes={routes}
-              onMouseEnter={handleOnMouseEnter}
-              onMouseLeave={handleOnMouseLeave}
-            />
-            <Configurator />
-            {configsButton}
-          </>
-        )}
-        {layout === "vr" && <Configurator />}
-        <Routes>
-          {getRoutes(routes)}
-          <Route path="*" element={<Navigate to="/tables" />} />
-        </Routes>
-      </ThemeProvider>
-    </CacheProvider>
-  ) : (
+  return (
     <ThemeProvider theme={darkMode ? themeDark : theme}>
       <CssBaseline />
       {layout === "dashboard" && (
@@ -195,8 +133,8 @@ export default function App() {
           <Sidenav
             color={sidenavColor}
             brand={(transparentSidenav && !darkMode) || whiteSidenav ? brandDark : brandWhite}
-            brandName="Material Dashboard 2"
-            routes={routes}
+            brandName="Tinyfy"
+            routes={routes.filter((route) => route.showInSidebar)}
             onMouseEnter={handleOnMouseEnter}
             onMouseLeave={handleOnMouseLeave}
           />
@@ -206,7 +144,23 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {getRoutes(routes)}
+        {routes.map((route) => (
+          <Route
+            key={route.key}
+            path={route.route}
+            element={
+              route.protected ? (
+                isAuthenticated() ? (
+                  <route.component />
+                ) : (
+                  <Navigate to="/authentication/sign-in" replace />
+                )
+              ) : (
+                <route.component />
+              )
+            }
+          />
+        ))}
         <Route path="*" element={<Navigate to="/tables" />} />
       </Routes>
     </ThemeProvider>
