@@ -1,18 +1,3 @@
-/**
-=========================================================
-* Material Dashboard 2 React - v2.2.0
-=========================================================
-
-* Product Page: https://www.creative-tim.com/product/material-dashboard-react
-* Copyright 2023 Creative Tim (https://www.creative-tim.com)
-
-Coded by www.creative-tim.com
-
- =========================================================
-
-* The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-*/
-
 // react-router-dom components
 import { Link } from "react-router-dom";
 import { useState } from "react";
@@ -28,7 +13,7 @@ import MDButton from "components/MDButton";
 import register from "../../../services/register";
 // Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
-
+import ErrorNotification from "components/ErrorNotification";
 // Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 
@@ -37,10 +22,31 @@ function Cover() {
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
+  const [confirmEmail, setConfirmEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+  const isValidEmail = (email) => {
+    // Simple email validation regex
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
   const handleSignUp = async () => {
+    if (!isValidEmail(email)) {
+      setError("El correo electrónico no es válido");
+      return;
+    }
+    if (email !== confirmEmail) {
+      setError("Los correos electrónicos no coinciden");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Las contraseñas no coinciden");
+      return;
+    }
+
     try {
       const userData = {
         first_name: firstName,
@@ -53,13 +59,19 @@ function Cover() {
       alert("Registro exitoso");
       setRegistrationSuccess(true);
     } catch (error) {
-      // Puedes manejar los errores según tus necesidades (por ejemplo, mostrar un mensaje de error)
+      setError("Error al registrarse. Inténtalo de nuevo más tarde.");
       console.error("Error al registrarse:", error);
     }
   };
+
   const handleAlertClick = () => {
-    setRegistrationSuccess(false); // Ocultar el alert al hacer clic
+    setRegistrationSuccess(false);
   };
+
+  const handleErrorClose = () => {
+    setError(null);
+  };
+
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -121,6 +133,18 @@ function Cover() {
                 fullWidth
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </MDBox>
+            <MDBox mb={2}>
+              <MDInput
+                type="email"
+                label="Confirm Email"
+                variant="standard"
+                fullWidth
+                value={confirmEmail}
+                onChange={(e) => setConfirmEmail(e.target.value)}
+                required
               />
             </MDBox>
             <MDBox mb={2}>
@@ -131,6 +155,18 @@ function Cover() {
                 fullWidth
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </MDBox>
+            <MDBox mb={2}>
+              <MDInput
+                type="password"
+                label="Confirm Password"
+                variant="standard"
+                fullWidth
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
               />
             </MDBox>
             <MDBox display="flex" alignItems="center" ml={-1}>
@@ -196,6 +232,7 @@ function Cover() {
                 </MDTypography>
               </MDTypography>
             </MDBox>
+            <ErrorNotification error={error} onClose={handleErrorClose} />
           </MDBox>
         </MDBox>
       </Card>
