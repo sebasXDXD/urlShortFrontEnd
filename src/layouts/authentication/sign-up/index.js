@@ -1,21 +1,20 @@
-// react-router-dom components
-import { Link } from "react-router-dom";
-import { useState } from "react";
-// @mui material components
+import React, { useState } from "react";
 import Card from "@mui/material/Card";
 import Checkbox from "@mui/material/Checkbox";
-
-// Material Dashboard 2 React components
+import Grid from "@mui/material/Grid";
+import MuiLink from "@mui/material/Link";
+import GoogleIcon from "@mui/icons-material/Google";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
-import register from "../../../services/register";
-// Authentication layout components
 import CoverLayout from "layouts/authentication/components/CoverLayout";
 import ErrorNotification from "components/ErrorNotification";
-// Images
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
+import { useGoogleLogin } from "@react-oauth/google";
+import { Link } from "react-router-dom";
+import register from "../../../services/register";
+import IconButton from "@mui/material/IconButton";
 
 function Cover() {
   const [firstName, setFirstName] = useState("");
@@ -27,11 +26,12 @@ function Cover() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState(null);
   const [registrationSuccess, setRegistrationSuccess] = useState(false);
+
   const isValidEmail = (email) => {
-    // Simple email validation regex
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };
+
   const handleSignUp = async () => {
     if (!isValidEmail(email)) {
       setError("El correo electrónico no es válido");
@@ -41,7 +41,6 @@ function Cover() {
       setError("Los correos electrónicos no coinciden");
       return;
     }
-
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden");
       return;
@@ -63,6 +62,52 @@ function Cover() {
       console.error("Error al registrarse:", error);
     }
   };
+
+  const handleGoogleLoginSuccess = async (response) => {
+    console.log("Login exitoso con Google:", response);
+    try {
+      const userInfo = await getUserInfo(response.access_token);
+      console.log("Datos del usuario:", userInfo);
+
+      // Aquí puedes manejar los datos del usuario según tus necesidades
+      // Por ejemplo, puedes establecer los datos del usuario en los estados locales
+      setFirstName(userInfo.given_name);
+      setLastName(userInfo.family_name);
+      setUsername(userInfo.email.split("@")[0]);
+      setEmail(userInfo.email);
+
+      // Puedes comentar esta línea si solo deseas imprimir los datos del usuario
+      // y no deseas guardarlos en el estado local
+    } catch (error) {
+      console.error("Error al obtener datos del usuario:", error);
+      setError("Error al obtener datos del usuario desde Google. Inténtalo de nuevo más tarde.");
+    }
+  };
+  const getUserInfo = async (accessToken) => {
+    const userInfoEndpoint = `https://www.googleapis.com/oauth2/v1/userinfo?access_token=${accessToken}`;
+
+    try {
+      const response = await fetch(userInfoEndpoint);
+      if (!response.ok) {
+        throw new Error("Failed to fetch user info");
+      }
+      const userData = await response.json();
+      return userData;
+    } catch (error) {
+      console.error("Error fetching user info:", error);
+      throw error;
+    }
+  };
+
+  const handleGoogleLoginFailure = (error) => {
+    console.error("Error al iniciar sesión con Google:", error);
+    setError("Error al iniciar sesión con Google. Inténtalo de nuevo más tarde.");
+  };
+
+  const googleLogin = useGoogleLogin({
+    onSuccess: handleGoogleLoginSuccess,
+    onError: handleGoogleLoginFailure,
+  });
 
   const handleAlertClick = () => {
     setRegistrationSuccess(false);
@@ -92,6 +137,17 @@ function Cover() {
           <MDTypography display="block" variant="button" color="white" my={1}>
             Ingresa tu correo electrónico y contraseña para registrarte
           </MDTypography>
+          <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
+            <Grid item xs={2}>
+              <IconButton
+                color="white"
+                onClick={() => googleLogin()}
+                sx={{ backgroundColor: "transparent" }}
+              >
+                <GoogleIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
         </MDBox>
         <MDBox pt={4} pb={3} px={3}>
           <MDBox component="form" role="form">
@@ -190,36 +246,14 @@ function Cover() {
                 Términos y Condiciones
               </MDTypography>
             </MDBox>
-
             <MDBox mt={4} mb={1}>
               <MDButton variant="gradient" color="info" fullWidth onClick={handleSignUp}>
                 Registrarse
               </MDButton>
             </MDBox>
             <MDBox mt={3} mb={1} textAlign="center">
-              {registrationSuccess && (
-                <>
-                  <MDTypography variant="button" color="text">
-                    Registro exitoso. ¿Deseas iniciar sesión?
-                  </MDTypography>
-                  <Link to="/authentication/sign-in" variant="button" color="info">
-                    <button
-                      onClick={handleAlertClick}
-                      style={{
-                        border: "none",
-                        backgroundColor: "transparent",
-                        cursor: "pointer",
-                      }}
-                    >
-                      OK
-                    </button>
-                  </Link>
-                </>
-              )}
-            </MDBox>
-            <MDBox mt={3} mb={1} textAlign="center">
               <MDTypography variant="button" color="text">
-                Ya tienes cuenta?{" "}
+                ¿Ya tienes una cuenta?{" "}
                 <MDTypography
                   component={Link}
                   to="/authentication/sign-in"

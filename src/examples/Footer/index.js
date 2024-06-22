@@ -99,12 +99,12 @@ function Footer({ company, links }) {
 
 // Setting default values for the props of Footer
 Footer.defaultProps = {
-  company: { href: "https://www.creative-tim.com/", name: "Creative Tim" },
+  company: { href: "https://sebastiandavidurbina.vercel.app/", name: "Tu Nombre" },
   links: [
-    { href: "https://www.creative-tim.com/", name: "Creative Tim" },
-    { href: "https://www.creative-tim.com/presentation", name: "About Us" },
-    { href: "https://www.creative-tim.com/blog", name: "Blog" },
-    { href: "https://www.creative-tim.com/license", name: "License" },
+    { href: "https://sebastiandavidurbina.vercel.app/", name: "Inicio" },
+    { href: "https://sebastiandavidurbina.vercel.app/about", name: "Sobre Mí" },
+    { href: "https://sebastiandavidurbina.vercel.app/blog", name: "Blog" },
+    { href: "https://www.linkedin.com/in/sebastian-urbina-01b93218a/", name: "Contacto" },
   ],
 };
 
