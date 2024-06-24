@@ -20,14 +20,15 @@ const SignUpForm = () => {
 
   const handleFormSubmit = async () => {
     const userData = {
-      firstName,
-      lastName,
+      first_name: firstName,
+      last_name: lastName,
       username,
       email,
       confirmEmail,
       password,
       confirmPassword,
     };
+
     const success = await handleSignUp(userData);
     if (success) {
       alert("Registro exitoso");

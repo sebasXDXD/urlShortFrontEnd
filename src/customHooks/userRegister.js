@@ -1,5 +1,5 @@
 import { useState } from "react";
-import register from "../services/register";
+import { register } from "../services/register";
 
 const userRegister = () => {
   const [error, setError] = useState(null);
@@ -25,7 +25,6 @@ const userRegister = () => {
       setError("Las contraseñas no coinciden");
       return false;
     }
-
     try {
       await register(userData);
       setRegistrationSuccess(true);

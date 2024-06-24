@@ -1,8 +1,7 @@
-// hooks/useGoogleAuth.js
 import { useGoogleLogin } from "@react-oauth/google";
 import { useState } from "react";
-
-const userGoogleAuth = () => {
+import { registerGoogleUser } from "services/register";
+const useGoogleAuth = () => {
   const [error, setError] = useState(null);
 
   const getUserInfo = async (accessToken) => {
@@ -21,13 +20,37 @@ const userGoogleAuth = () => {
     }
   };
 
+  const mapGoogleUserDataToUsers = (googleUserData) => {
+    // Extraer el nombre de usuario del email (antes del '@')
+    const username = googleUserData.email.split("@")[0];
+
+    return {
+      first_name: googleUserData.given_name,
+      last_name: googleUserData.family_name,
+      username: username,
+      email: googleUserData.email,
+      google_id: googleUserData.id,
+      password: "",
+    };
+  };
+
   const handleGoogleLoginSuccess = async (response) => {
     try {
+      // Obtener información del usuario desde Google
       const userInfo = await getUserInfo(response.access_token);
-      console.log(userInfo);
+      console.log("Usuario obtenido desde Google:", userInfo);
+
+      // Mapear los datos del usuario de Google a la estructura de usuario del backend
+      const userData = mapGoogleUserDataToUsers(userInfo);
+
+      // Llamar automáticamente a la función de registro de usuario en tu backend
+      const registeredUser = await registerGoogleUser(userData);
+      console.log("Usuario registrado:", registeredUser);
+
       return userInfo;
     } catch (error) {
       setError("Error al obtener datos del usuario desde Google. Inténtalo de nuevo más tarde.");
+      console.error("Error al registrar usuario:", error);
       throw error;
     }
   };
@@ -49,4 +72,4 @@ const userGoogleAuth = () => {
   };
 };
 
-export default userGoogleAuth;
+export default useGoogleAuth;
