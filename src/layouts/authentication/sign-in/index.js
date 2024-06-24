@@ -14,12 +14,13 @@ import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import login from "../../../services/login";
+import { login } from "../../../services/login";
 import { useAuth } from "providers/AuthProvider"; // Importa useAuth
-
+import GoogleLoginButton from "../components/GoogleLoginButton";
+import ViewTypes from "../../../constants/viewTypes";
 function Basic() {
   const navigate = useNavigate();
-  const { login: authLogin, isAuthenticated } = useAuth(); // Usa useAuth para obtener login y isAuthenticated
+  const { login: authLogin, isAuthenticated } = useAuth();
   const [rememberMe, setRememberMe] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -64,19 +65,7 @@ function Basic() {
           </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <FacebookIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GitHubIcon color="inherit" />
-              </MDTypography>
-            </Grid>
-            <Grid item xs={2}>
-              <MDTypography component={MuiLink} href="#" variant="body1" color="white">
-                <GoogleIcon color="inherit" />
-              </MDTypography>
+              <GoogleLoginButton viewType={ViewTypes.LOGIN} />
             </Grid>
           </Grid>
         </MDBox>

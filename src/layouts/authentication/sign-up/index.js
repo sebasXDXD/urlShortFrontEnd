@@ -7,7 +7,7 @@ import CoverLayout from "layouts/authentication/components/CoverLayout";
 import SignUpForm from "../components/SingUpForm";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import bgImage from "assets/images/bg-sign-up-cover.jpeg";
-
+import ViewTypes from "../../../constants/viewTypes";
 const RegisterPage = () => {
   return (
     <CoverLayout image={bgImage}>
@@ -18,7 +18,7 @@ const RegisterPage = () => {
           borderRadius="lg"
           coloredShadow="success"
           mx={2}
-          mt={-3}
+          mt={-10}
           p={3}
           mb={1}
           textAlign="center"
@@ -31,7 +31,7 @@ const RegisterPage = () => {
           </MDTypography>
           <Grid container spacing={3} justifyContent="center" sx={{ mt: 1, mb: 2 }}>
             <Grid item xs={2}>
-              <GoogleLoginButton />
+              <GoogleLoginButton viewType={ViewTypes.REGISTER} />
             </Grid>
           </Grid>
         </MDBox>

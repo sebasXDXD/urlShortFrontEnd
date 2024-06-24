@@ -10,5 +10,14 @@ const login = async (username, password) => {
     throw error;
   }
 };
+const loginGoogleUser = async (userData) => {
+  console.log("User data:", userData);
+  try {
+    const response = await axios.post("http://localhost:8000/loginGoogle", userData);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
 
-export default login;
+export { login, loginGoogleUser };
