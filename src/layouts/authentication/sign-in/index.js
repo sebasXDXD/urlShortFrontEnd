@@ -34,7 +34,7 @@ function Basic() {
       // Guarda el token en el contexto de autenticación
       authLogin(response.token);
       // Redirige al usuario al dashboard
-      navigate("/tables");
+      navigate("/links");
     } catch (error) {
       // Puedes manejar los errores según tus necesidades (por ejemplo, mostrar un mensaje de error)
       console.error("Error al iniciar sesión:", error);
@@ -43,7 +43,7 @@ function Basic() {
 
   // Si el usuario ya está autenticado, redirige al dashboard
   if (isAuthenticated()) {
-    navigate("/tables");
+    navigate("/links");
   }
 
   return (

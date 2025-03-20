@@ -45,7 +45,7 @@ const useGoogleLoginAuth = () => {
       // Llamar automáticamente a la función de inicio de sesión de usuario en tu backend
       const loggedInUser = await loginGoogleUser(userData);
       authLogin(loggedInUser.token);
-      navigate("/tables");
+      navigate("/links");
       return userInfo;
     } catch (error) {
       setError("Error al obtener datos del usuario desde Google. Inténtalo de nuevo más tarde.");

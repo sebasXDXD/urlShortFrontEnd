@@ -1,7 +1,7 @@
 import React from "react";
 import Icon from "@mui/material/Icon";
 import Dashboard from "layouts/dashboard";
-import Tables from "layouts/tables";
+import Links from "layouts/links";
 import Profile from "layouts/profile";
 import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
@@ -11,10 +11,10 @@ const routes = [
   {
     type: "collapse",
     name: "Links",
-    key: "tables",
+    key: "links",
     icon: <Icon fontSize="small">table_view</Icon>,
-    route: "/tables",
-    component: Tables,
+    route: "/links",
+    component: Links,
     protected: true,
     showInSidebar: true,
   },

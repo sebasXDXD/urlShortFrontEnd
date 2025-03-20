@@ -1,11 +1,35 @@
 import axios from "axios";
+
+const API_URL = "http://localhost:8000";
+
 // Función para obtener todos los links
 const getLinks = async () => {
   try {
-    const response = await axios.get("http://localhost:8000/links");
+    const response = await axios.get(`${API_URL}/links`);
     return response.data;
   } catch (error) {
-    // Manejar los errores según tus necesidades
+    throw error;
+  }
+};
+
+// Función para obtener un link por su identificador único (shortCode o slug)
+const getLink = async (link) => {
+  try {
+    const response = await axios.get(`${API_URL}/link/${link}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+
+// Función para obtener un link por su ID
+const getLinkById = async (id, token) => {
+  try {
+    const response = await axios.get(`${API_URL}/link/id/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    return response.data;
+  } catch (error) {
     throw error;
   }
 };
@@ -14,15 +38,10 @@ const getLinks = async () => {
 const createLink = async (name, redirectTo, token) => {
   try {
     const response = await axios.post(
-      "http://localhost:8000/link",
+      `${API_URL}/link`,
+      { name, redirect_to: redirectTo },
       {
-        name,
-        redirect_to: redirectTo,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`, // Agrega el token al header de Authorization
-        },
+        headers: { Authorization: `Bearer ${token}` },
       }
     );
     return response.data;
@@ -31,16 +50,20 @@ const createLink = async (name, redirectTo, token) => {
   }
 };
 
-// Función para obtener un solo link
-const getLink = async (link) => {
+// Función para actualizar un link
+const updateLink = async (id, name, redirectTo, token) => {
   try {
-    const response = await axios.get(`http://localhost:8000/link/${link}`);
+    const response = await axios.put(
+      `${API_URL}/link/${id}`,
+      { name, redirect_to: redirectTo },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    );
     return response.data;
   } catch (error) {
-    // Manejar los errores según tus necesidades
     throw error;
   }
 };
 
-// Exportar todas las funciones
-export { getLinks, createLink, getLink };
+export { getLinks, getLink, getLinkById, createLink, updateLink };
