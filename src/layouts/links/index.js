@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import MDButton from "components/MDButton";
 import CreateLink from "./CreateLink";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
+import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import EditIcon from "@mui/icons-material/Edit";
 import ShareIcon from "@mui/icons-material/Share";
 import QrCodeIcon from "@mui/icons-material/QrCode";
@@ -22,6 +23,8 @@ import Footer from "examples/Footer";
 import { getLinks } from "../../services/links";
 import { Box, Fab } from "@mui/material";
 import EditLink from "./EditLink";
+import ShareButton from "./shareButton";
+import LinkIconComponent from "components/LinkIcon";
 
 function Links() {
   const [linksData, setLinksData] = useState([]);
@@ -60,21 +63,6 @@ function Links() {
     fetchData();
   }, []);
 
-  // Función para determinar el tipo de icono según la URL
-  const getLinkIcon = (url) => {
-    if (url.includes("youtube") || url.includes("youtu.be")) {
-      return <YouTubeIcon sx={{ color: "red" }} />;
-    } else if (url.includes("spotify")) {
-      return (
-        <MDAvatar
-          src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/84/Spotify_icon.svg/1982px-Spotify_icon.svg.png"
-          size="sm"
-        />
-      );
-    } else {
-      return <LinkIcon color="primary" />;
-    }
-  };
   const [selectedLinkId, setSelectedLinkId] = useState(null);
 
   // Función para copiar al portapapeles
@@ -125,7 +113,7 @@ function Links() {
                   justifyContent="space-between"
                 >
                   <MDBox display="flex" alignItems="center" width="100%" mb={1}>
-                    <MDBox mr={2}>{getLinkIcon(link.redirect_to)}</MDBox>
+                    <LinkIconComponent url={link.redirect_to} />
                     <MDBox flex={1} overflow="hidden">
                       <MDTypography
                         variant="button"
@@ -185,6 +173,15 @@ function Links() {
                       variant="outlined"
                       color="info"
                       size="small"
+                      onClick={() => window.open(link.redirect_to, "_blank", "noopener,noreferrer")}
+                      title="Visitar URL"
+                    >
+                      <OpenInNewIcon fontSize="small" />
+                    </MDButton>
+                    <MDButton
+                      variant="outlined"
+                      color="info"
+                      size="small"
                       onClick={() => copyToClipboard(link.redirect_to)}
                     >
                       <ContentCopyIcon fontSize="small" />
@@ -229,18 +226,7 @@ function Links() {
                         QR
                       </MDTypography>
                     </MDButton>
-
-                    <MDButton variant="outlined" color="info" size="small">
-                      <ShareIcon fontSize="small" />
-                      <MDTypography
-                        variant="button"
-                        fontWeight="medium"
-                        ml={1}
-                        display={{ xs: "none", sm: "block" }}
-                      >
-                        Compartir
-                      </MDTypography>
-                    </MDButton>
+                    <ShareButton url={getShortUrl(link.name)} title="Mira este enlace" />
                   </MDBox>
                 </MDBox>
               </Card>
