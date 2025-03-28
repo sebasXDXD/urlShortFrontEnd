@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /**
 =========================================================
 * Material Dashboard 2 React - v2.2.0
@@ -208,6 +209,7 @@ function DataTable({
               <TableRow key={key} {...row.getRowProps()}>
                 {row.cells.map((cell, idx) => (
                   <DataTableBodyCell
+                    // eslint-disable-next-line react/no-array-index-key
                     key={idx}
                     noBorder={noEndBorder && rows.length - 1 === key}
                     align={cell.column.align ? cell.column.align : "left"}
@@ -290,7 +292,7 @@ DataTable.propTypes = {
   ]),
   canSearch: PropTypes.bool,
   showTotalEntries: PropTypes.bool,
-  table: PropTypes.objectOf(PropTypes.array).isRequired,
+  table: PropTypes.objectOf(PropTypes).isRequired,
   pagination: PropTypes.shape({
     variant: PropTypes.oneOf(["contained", "gradient"]),
     color: PropTypes.oneOf([

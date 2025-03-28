@@ -128,8 +128,16 @@ ProfileInfoCard.defaultProps = {
 ProfileInfoCard.propTypes = {
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
-  info: PropTypes.objectOf(PropTypes.string).isRequired,
-  social: PropTypes.arrayOf(PropTypes.object).isRequired,
+  info: PropTypes.shape({
+    key1: PropTypes.string, // Reemplaza con las claves reales
+    key2: PropTypes.string,
+  }).isRequired,
+  social: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired, // Ajusta según la estructura real
+      url: PropTypes.string.isRequired,
+    })
+  ).isRequired,
   action: PropTypes.shape({
     route: PropTypes.string.isRequired,
     tooltip: PropTypes.string.isRequired,

@@ -36,7 +36,7 @@ function ErrorNotification({ error, onClose }) {
 }
 
 ErrorNotification.propTypes = {
-  error: PropTypes.string,
+  error: PropTypes.string.isRequired,
   onClose: PropTypes.func.isRequired,
 };
 

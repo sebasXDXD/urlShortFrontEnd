@@ -7,12 +7,11 @@ const getFaviconUrl = (url) => {
     const domain = new URL(url).hostname.replace("www.", "");
     return `https://www.google.com/s2/favicons?sz=64&domain=${domain}`;
   } catch (error) {
-    console.error("Invalid URL:", url);
     return null;
   }
 };
 
-const LinkIconComponent = ({ url, size = 32 }) => {
+function LinkIconComponent({ url, size = 32 }) {
   const faviconUrl = getFaviconUrl(url);
 
   return faviconUrl ? (
@@ -21,7 +20,7 @@ const LinkIconComponent = ({ url, size = 32 }) => {
       sx={{
         width: size,
         height: size,
-        borderRadius: 4, // Menos redondo, más cuadrado
+        borderRadius: 0,
         mr: 1, // Espacio a la derecha
       }}
     />
@@ -35,11 +34,11 @@ const LinkIconComponent = ({ url, size = 32 }) => {
       }}
     />
   );
-};
+}
 
 LinkIconComponent.propTypes = {
   url: PropTypes.string.isRequired,
-  size: PropTypes.number,
+  size: PropTypes.number.isRequired,
 };
 
 export default LinkIconComponent;

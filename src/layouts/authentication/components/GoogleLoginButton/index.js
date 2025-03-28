@@ -1,4 +1,3 @@
-// components/GoogleLoginButton.js
 import React from "react";
 import PropTypes from "prop-types";
 import { IconButton } from "@mui/material";
@@ -7,9 +6,8 @@ import userGoogleAuth from "../../../../customHooks/userGoogleAuth";
 import userGoogleLoginAuth from "../../../../customHooks/userGoogleLoginAuth"; // Assuming this hook is for login
 import ViewTypes from "../../../../constants/viewTypes";
 
-const GoogleLoginButton = ({ viewType }) => {
+function GoogleLoginButton({ viewType }) {
   let googleLogin;
-
   if (viewType === ViewTypes.REGISTER) {
     googleLogin = userGoogleAuth().googleLogin;
   } else if (viewType === ViewTypes.LOGIN) {
@@ -21,7 +19,7 @@ const GoogleLoginButton = ({ viewType }) => {
       <GoogleIcon />
     </IconButton>
   );
-};
+}
 
 GoogleLoginButton.propTypes = {
   viewType: PropTypes.oneOf([ViewTypes.REGISTER, ViewTypes.LOGIN]).isRequired,

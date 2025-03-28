@@ -29,9 +29,8 @@ const userRegister = () => {
       await register(userData);
       setRegistrationSuccess(true);
       return true;
-    } catch (error) {
+    } catch (err) {
       setError("Error al registrarse. Inténtalo de nuevo más tarde.");
-      console.error("Error al registrarse:", error);
       return false;
     }
   };

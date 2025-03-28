@@ -32,7 +32,6 @@ import Configurator from "examples/Configurator";
 
 // Material Dashboard 2 React themes
 import theme from "assets/theme";
-import themeRTL from "assets/theme/theme-rtl";
 
 // Material Dashboard 2 React Dark Mode themes
 import themeDark from "assets/theme-dark";
@@ -92,9 +91,6 @@ export default function App() {
     document.scrollingElement.scrollTop = 0;
   }, [pathname]);
 
-  // Cache for the rtl (removed because no longer needed)
-  const rtlCache = null;
-
   const configsButton = (
     <MDBox
       display="flex"
@@ -138,23 +134,20 @@ export default function App() {
       )}
       {layout === "vr" && <Configurator />}
       <Routes>
-        {routes.map((route) => (
-          <Route
-            key={route.key}
-            path={route.route}
-            element={
-              route.protected ? (
-                isAuthenticated() ? (
-                  <route.component />
-                ) : (
-                  <Navigate to="/authentication/sign-in" replace />
-                )
-              ) : (
+        {routes.map((route) => {
+          const renderElement = () => {
+            if (route.protected) {
+              return isAuthenticated() ? (
                 <route.component />
-              )
+              ) : (
+                <Navigate to="/authentication/sign-in" replace />
+              );
             }
-          />
-        ))}
+            return <route.component />;
+          };
+
+          return <Route key={route.key} path={route.route} element={renderElement()} />;
+        })}
         <Route path="*" element={<Navigate to="/links" />} />
       </Routes>
     </ThemeProvider>

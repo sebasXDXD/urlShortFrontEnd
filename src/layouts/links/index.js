@@ -2,29 +2,23 @@ import Grid from "@mui/material/Grid";
 import Card from "@mui/material/Card";
 import { useState, useEffect } from "react";
 import MDButton from "components/MDButton";
-import CreateLink from "./CreateLink";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
 import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import EditIcon from "@mui/icons-material/Edit";
-import ShareIcon from "@mui/icons-material/Share";
 import QrCodeIcon from "@mui/icons-material/QrCode";
-import YouTubeIcon from "@mui/icons-material/YouTube";
 import LinkIcon from "@mui/icons-material/Link";
 import Alert from "@mui/material/Alert";
 import Snackbar from "@mui/material/Snackbar";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
-import MDAvatar from "components/MDAvatar";
-
 import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
-
+import LinkIconComponent from "components/LinkIcon";
 import { getLinks } from "../../services/links";
-import { Box, Fab } from "@mui/material";
 import EditLink from "./EditLink";
 import ShareButton from "./shareButton";
-import LinkIconComponent from "components/LinkIcon";
+import CreateLink from "./CreateLink";
 
 function Links() {
   const [linksData, setLinksData] = useState([]);
@@ -54,8 +48,9 @@ function Links() {
     try {
       const data = await getLinks();
       setLinksData(data);
+      return data;
     } catch (error) {
-      console.error("Error fetching links:", error);
+      return null;
     }
   };
 
@@ -86,9 +81,7 @@ function Links() {
   };
 
   // Función para generar la URL corta basada en el ID
-  const getShortUrl = (name) => {
-    return `${window.location.origin}/redirect/${name}`;
-  };
+  const getShortUrl = (name) => `${window.location.origin}/redirect/${name}`;
 
   return (
     <DashboardLayout>

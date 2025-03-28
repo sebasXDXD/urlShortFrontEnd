@@ -165,7 +165,13 @@ DefaultProjectCard.propTypes = {
     ]).isRequired,
     label: PropTypes.string.isRequired,
   }).isRequired,
-  authors: PropTypes.arrayOf(PropTypes.object),
+  authors: PropTypes.arrayOf(
+    PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      avatar: PropTypes.string,
+      role: PropTypes.string,
+    })
+  ),
 };
 
 export default DefaultProjectCard;
