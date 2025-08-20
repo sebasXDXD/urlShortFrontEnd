@@ -3,7 +3,7 @@ import Card from "@mui/material/Card";
 import { useState, useEffect } from "react";
 import MDButton from "components/MDButton";
 import ContentCopyIcon from "@mui/icons-material/ContentCopy";
-import OpenInNewIcon from "@mui/icons-material/OpenInNew";
+// import OpenInNewIcon from "@mui/icons-material/OpenInNew";
 import EditIcon from "@mui/icons-material/Edit";
 import QrCodeIcon from "@mui/icons-material/QrCode";
 import LinkIcon from "@mui/icons-material/Link";
@@ -166,11 +166,18 @@ function Links() {
                       variant="outlined"
                       color="info"
                       size="small"
-                      onClick={() => window.open(link.redirect_to, "_blank", "noopener,noreferrer")}
+                      onClick={() =>
+                        window.open(
+                          `http://localhost:8000/${link.name}`,
+                          "_blank",
+                          "noopener,noreferrer"
+                        )
+                      }
                       title="Visitar URL"
                     >
-                      <OpenInNewIcon fontSize="small" />
+                      Visitar
                     </MDButton>
+
                     <MDButton
                       variant="outlined"
                       color="info"

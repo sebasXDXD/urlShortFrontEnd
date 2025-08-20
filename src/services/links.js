@@ -8,6 +8,7 @@ const getLinks = async () => {
     const response = await axios.get(`${API_URL}/links`);
     return response.data;
   } catch (error) {
+    console.error("Error en getLinks:", error.message);
     throw error;
   }
 };
@@ -18,6 +19,7 @@ const getLink = async (link) => {
     const response = await axios.get(`${API_URL}/link/${link}`);
     return response.data;
   } catch (error) {
+    console.error(`Error en getLink (${link}):`, error.message);
     throw error;
   }
 };
@@ -30,6 +32,7 @@ const getLinkById = async (id, token) => {
     });
     return response.data;
   } catch (error) {
+    console.error(`Error en getLinkById (${id}):`, error.message);
     throw error;
   }
 };
@@ -46,6 +49,7 @@ const createLink = async (name, redirectTo, token) => {
     );
     return response.data;
   } catch (error) {
+    console.error(`Error en createLink (${name} -> ${redirectTo}):`, error.message);
     throw error;
   }
 };
@@ -62,6 +66,7 @@ const updateLink = async (id, name, redirectTo, token) => {
     );
     return response.data;
   } catch (error) {
+    console.error(`Error en updateLink (${id}):`, error.message);
     throw error;
   }
 };

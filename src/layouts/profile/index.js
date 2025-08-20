@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useAuth } from "providers/AuthProvider";
 import Grid from "@mui/material/Grid";
 import MDBox from "components/MDBox";
 
@@ -15,33 +16,9 @@ import SecuritySettings from "./components/SecuritySettings";
 import CustomDomains from "./components/CustomDomains";
 import SubscriptionPlans from "./components/SubscriptionPlans";
 import PlatformSettings from "./components/PlatformSettings";
+import getFullProfile from "../../services/profile";
 
-// Mock data
-const userData = {
-  fullName: "Carlos Rodríguez",
-  avatarUrl: "https://via.placeholder.com/150",
-  joinDate: "Mayo 2023",
-  planName: "Plan Pro",
-};
-
-const userInfo = {
-  firstName: "Carlos",
-  lastName: "Rodríguez",
-  email: "carlos.rodriguez@ejemplo.com",
-  company: "MiEmpresa S.A.",
-  country: "España",
-  phone: "+34 600 123 456",
-};
-
-const activityStats = {
-  urlsCreated: 357,
-  urlsLimit: 500,
-  totalClicks: 12845,
-  popularUrl: "acorta.do/x8j2a",
-  popularUrlClicks: 2451,
-  lastAccess: "28 marzo, 2025 - 18:42",
-};
-
+// Planes mock (esto sí puede quedar fijo)
 const plans = [
   {
     id: "free",
@@ -82,6 +59,69 @@ const plans = [
 ];
 
 function Overview() {
+  const { getToken } = useAuth();
+  const [profile, setProfile] = useState(null);
+
+  useEffect(() => {
+    const token = getToken();
+    if (!token) {
+      console.warn("No hay token, no se puede obtener el perfil.");
+      return;
+    }
+
+    getFullProfile(token)
+      .then((data) => {
+        console.log("Perfil completo desde backend:", data);
+        setProfile(data);
+      })
+      .catch((error) => {
+        console.error("Error al obtener perfil completo:", error);
+      });
+  }, [getToken]);
+
+  if (!profile) {
+    return (
+      <DashboardLayout>
+        <DashboardNavbar />
+        <MDBox mt={10} textAlign="center">
+          <p>Cargando perfil...</p>
+        </MDBox>
+        <Footer />
+      </DashboardLayout>
+    );
+  }
+
+  // 🔹 Mapear datos del backend al formato que esperan tus componentes
+  const userData = {
+    fullName: profile.fullName,
+    avatarUrl: "https://via.placeholder.com/150", // si no tienes foto en backend
+    joinDate: new Date(profile.joinDate).toLocaleDateString("es-ES", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    }),
+    planName: profile.plan || "Plan Gratuito",
+  };
+
+  const userInfo = {
+    firstName: profile.fullName.split(" ")[0],
+    lastName: profile.fullName.split(" ").slice(1).join(" "),
+    email: profile.email,
+    company: profile.company || "No especificada",
+    country: profile.country || "No especificado",
+    phone: profile.phone || "No especificado",
+  };
+
+  const activityStats = {
+    urlsCreated: profile.stats.urlsCreated,
+    urlsLimit: profile.stats.urlsLimit,
+    totalClicks: profile.stats.totalClicks,
+    popularUrl: profile.stats.popularUrl || "N/A",
+    popularUrlClicks: profile.stats.popularUrlClicks || 0,
+    lastAccess:
+      profile.stats.lastAccess === "01 Jan 0001 00:00" ? "Nunca" : profile.stats.lastAccess,
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -120,7 +160,10 @@ function Overview() {
 
           {/* Subscription Plans */}
           <Grid item xs={12}>
-            <SubscriptionPlans plans={plans} currentPlanId="pro" />
+            <SubscriptionPlans
+              plans={plans}
+              currentPlanId={profile.plan?.toLowerCase() || "free"}
+            />
           </Grid>
         </Grid>
       </MDBox>

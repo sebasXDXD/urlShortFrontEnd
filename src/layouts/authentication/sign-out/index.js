@@ -7,10 +7,16 @@ function SignOut() {
   const { logout } = useAuth();
 
   useEffect(() => {
-    // Llama a la función de cierre de sesión
-    logout();
-    // Redirige al usuario a la página de inicio de sesión
-    navigate("/authentication/sign-in");
+    // Ejecuta después del primer render
+    Promise.resolve().then(() => {
+      const confirmLogout = window.confirm("¿Estás seguro de que deseas cerrar sesión?");
+      if (confirmLogout) {
+        logout();
+        navigate("/authentication/sign-in");
+      } else {
+        navigate(-1);
+      }
+    });
   }, [logout, navigate]);
 
   return null;

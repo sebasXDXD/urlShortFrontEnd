@@ -1,46 +1,35 @@
-import React, { createContext, useContext, useState } from "react";
-import PropTypes from "prop-types"; // Importa PropTypes para validar las props
+import React, { createContext, useContext, useState, useMemo } from "react";
+import PropTypes from "prop-types";
 
-// Creamos el contexto
 const AuthContext = createContext();
 
-// Creamos el proveedor del contexto
-export const AuthProvider = ({ children }) => {
+export function AuthProvider({ children }) {
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  // Función para iniciar sesión
-  const login = (token) => {
-    setToken(token);
-    localStorage.setItem("token", token);
+  const login = (newToken) => {
+    setToken(newToken);
+    localStorage.setItem("token", newToken);
   };
 
-  // Función para cerrar sesión
   const logout = () => {
     setToken(null);
     localStorage.removeItem("token");
   };
 
-  // Función para verificar si el usuario está autenticado
-  const isAuthenticated = () => {
-    return !!token;
-  };
+  const isAuthenticated = () => !!token;
+  const getToken = () => token;
 
-  // Función para obtener el token de acceso
-  const getToken = () => {
-    return token;
-  };
-
-  return (
-    <AuthContext.Provider value={{ login, logout, isAuthenticated, getToken }}>
-      {children}
-    </AuthContext.Provider>
+  // Memoizamos el value
+  const value = useMemo(
+    () => ({ login, logout, isAuthenticated, getToken }),
+    [token] // solo se vuelve a crear si cambia el token
   );
-};
 
-// Especifica las propTypes para AuthProvider
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+}
+
 AuthProvider.propTypes = {
-  children: PropTypes.node.isRequired, // children debe ser un nodo React y es requerido
+  children: PropTypes.node.isRequired,
 };
 
-// Función para utilizar el contexto en otros componentes
 export const useAuth = () => useContext(AuthContext);
