@@ -15,11 +15,13 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import LinkIconComponent from "components/LinkIcon";
+import LaunchIcon from "@mui/icons-material/Launch";
 import { getLinks } from "../../services/links";
 import EditLink from "./EditLink";
 import ShareButton from "./shareButton";
 import CreateLink from "./CreateLink";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:8000";
 function Links() {
   const [linksData, setLinksData] = useState([]);
   const [open, setOpen] = useState(false);
@@ -167,22 +169,26 @@ function Links() {
                       color="info"
                       size="small"
                       onClick={() =>
-                        window.open(
-                          `http://localhost:8000/${link.name}`,
-                          "_blank",
-                          "noopener,noreferrer"
-                        )
+                        window.open(`${API_URL}/${link.name}`, "_blank", "noopener,noreferrer")
                       }
                       title="Visitar URL"
                     >
-                      Visitar
+                      <LaunchIcon fontSize="small" />
+                      <MDTypography
+                        variant="button"
+                        fontWeight="medium"
+                        ml={1}
+                        display={{ xs: "none", sm: "block" }}
+                      >
+                        Visitar
+                      </MDTypography>
                     </MDButton>
 
                     <MDButton
                       variant="outlined"
                       color="info"
                       size="small"
-                      onClick={() => copyToClipboard(link.redirect_to)}
+                      onClick={() => copyToClipboard(`${API_URL}/${link.name}`)} // copia corto
                     >
                       <ContentCopyIcon fontSize="small" />
                       <MDTypography

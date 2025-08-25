@@ -1,23 +1,14 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
 const login = async (username, password) => {
-  try {
-    const response = await axios.post("http://localhost:8000/login", { username, password });
-    // Puedes manejar la respuesta según tus necesidades
-    return response.data;
-  } catch (error) {
-    // Puedes manejar los errores según tus necesidades
-    throw error;
-  }
+  const response = await axiosInstance.post("/login", { username, password });
+  return response.data;
 };
+
+// Login con Google
 const loginGoogleUser = async (userData) => {
-  console.log("User data:", userData);
-  try {
-    const response = await axios.post("http://localhost:8000/loginGoogle", userData);
-    return response.data;
-  } catch (error) {
-    throw error;
-  }
+  const response = await axiosInstance.post("/loginGoogle", userData);
+  return response.data;
 };
 
 export { login, loginGoogleUser };

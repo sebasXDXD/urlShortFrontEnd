@@ -1,20 +1,9 @@
-import axios from "axios";
-
-const API_URL = "http://localhost:8000";
+import axiosInstance from "./axiosInstance";
 
 // Obtener el perfil completo del usuario
-const getFullProfile = async (token) => {
-  try {
-    const response = await axios.get(`${API_URL}/fullProfile`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    return response.data;
-  } catch (error) {
-    console.error("Error en getFullProfile:", error.message);
-    throw error;
-  }
+const getFullProfile = async () => {
+  const response = await axiosInstance.get("/fullProfile");
+  return response.data;
 };
 
 export default getFullProfile;

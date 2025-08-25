@@ -1,74 +1,39 @@
-import axios from "axios";
+import axiosInstance from "./axiosInstance";
 
-const API_URL = "http://localhost:8000";
-
-// Función para obtener todos los links
+// Obtener todos los links
 const getLinks = async () => {
-  try {
-    const response = await axios.get(`${API_URL}/links`);
-    return response.data;
-  } catch (error) {
-    console.error("Error en getLinks:", error.message);
-    throw error;
-  }
+  const response = await axiosInstance.get("/links");
+  return response.data;
 };
 
-// Función para obtener un link por su identificador único (shortCode o slug)
+// Obtener un link por shortcode o slug
 const getLink = async (link) => {
-  try {
-    const response = await axios.get(`${API_URL}/link/${link}`);
-    return response.data;
-  } catch (error) {
-    console.error(`Error en getLink (${link}):`, error.message);
-    throw error;
-  }
+  const response = await axiosInstance.get(`/link/${link}`);
+  return response.data;
 };
 
-// Función para obtener un link por su ID
-const getLinkById = async (id, token) => {
-  try {
-    const response = await axios.get(`${API_URL}/link/id/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
-  } catch (error) {
-    console.error(`Error en getLinkById (${id}):`, error.message);
-    throw error;
-  }
+// Obtener link por ID (token ya se envía por interceptor)
+const getLinkById = async (id) => {
+  const response = await axiosInstance.get(`/link/id/${id}`);
+  return response.data;
 };
 
-// Función para crear un nuevo enlace
-const createLink = async (name, redirectTo, token) => {
-  try {
-    const response = await axios.post(
-      `${API_URL}/link`,
-      { name, redirect_to: redirectTo },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(`Error en createLink (${name} -> ${redirectTo}):`, error.message);
-    throw error;
-  }
+// Crear un nuevo link
+const createLink = async (name, redirectTo) => {
+  const response = await axiosInstance.post("/link", {
+    name,
+    redirect_to: redirectTo,
+  });
+  return response.data;
 };
 
-// Función para actualizar un link
-const updateLink = async (id, name, redirectTo, token) => {
-  try {
-    const response = await axios.put(
-      `${API_URL}/link/${id}`,
-      { name, redirect_to: redirectTo },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    console.error(`Error en updateLink (${id}):`, error.message);
-    throw error;
-  }
+// Actualizar un link
+const updateLink = async (id, name, redirectTo) => {
+  const response = await axiosInstance.put(`/link/${id}`, {
+    name,
+    redirect_to: redirectTo,
+  });
+  return response.data;
 };
 
 export { getLinks, getLink, getLinkById, createLink, updateLink };
