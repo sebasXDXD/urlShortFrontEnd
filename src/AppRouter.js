@@ -3,11 +3,11 @@ import { useSelector } from "react-redux";
 import { Route, Navigate } from "react-router-dom";
 import routes from "./routes";
 
-const AppRouter = () => {
+function AppRouter() {
   const isAuthenticated = useSelector((state) => state.auth.isAuthenticated);
 
   return (
-    <React.Fragment>
+    <>
       {routes.map((route, index) => (
         <Route
           key={index}
@@ -23,8 +23,8 @@ const AppRouter = () => {
           }}
         />
       ))}
-    </React.Fragment>
+    </>
   );
-};
+}
 
 export default AppRouter;

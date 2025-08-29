@@ -7,6 +7,7 @@ import SignIn from "layouts/authentication/sign-in";
 import SignUp from "layouts/authentication/sign-up";
 import SignOut from "layouts/authentication/sign-out";
 import Redirector from "layouts/redirector";
+
 const routes = [
   {
     type: "collapse",
