@@ -25,8 +25,8 @@ const style = {
 
 const isValidURL = (url) => {
   try {
-    new URL(url);
-    return true;
+    const parsedUrl = new URL(url);
+    return Boolean(parsedUrl);
   } catch (error) {
     return false;
   }
@@ -126,6 +126,9 @@ CreateLink.propTypes = {
   open: PropTypes.bool.isRequired,
   handleClose: PropTypes.func.isRequired,
   onLinkCreated: PropTypes.func,
+};
+CreateLink.defaultProps = {
+  onLinkCreated: null,
 };
 
 export default CreateLink;

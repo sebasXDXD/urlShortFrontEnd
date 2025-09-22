@@ -1,13 +1,14 @@
 // components/SignUpForm.js
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import MDBox from "../../../../components/MDBox";
 import MDInput from "../../../../components/MDInput";
 import MDButton from "../../../../components/MDButton";
 import MDTypography from "../../../../components/MDTypography";
 import ErrorNotification from "../../../../components/ErrorNotification";
 import userRegister from "../../../../customHooks/userRegister";
-import { Link } from "react-router-dom";
-const SignUpForm = () => {
+
+function SignUpForm() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
@@ -16,8 +17,7 @@ const SignUpForm = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  const { error, registrationSuccess, handleSignUp, setError, setRegistrationSuccess } =
-    userRegister();
+  const { error, handleSignUp, setError } = userRegister();
 
   const handleFormSubmit = async () => {
     const userData = {
@@ -139,6 +139,6 @@ const SignUpForm = () => {
       <ErrorNotification error={error} onClose={handleErrorClose} />
     </MDBox>
   );
-};
+}
 
 export default SignUpForm;

@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { getLink } from "../../services/links";
 
-const Redirector = () => {
+function Redirector() {
   const { link } = useParams();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [error, setError] = useState(false);
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const Redirector = () => {
         } else {
           setError(true);
         }
-      } catch (error) {
+      } catch (err) {
         setError(true);
       }
     };
@@ -31,6 +31,6 @@ const Redirector = () => {
   }
 
   return <p>Redirigiendo...</p>;
-};
+}
 
 export default Redirector;

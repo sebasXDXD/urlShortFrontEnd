@@ -4,11 +4,12 @@ import { Card, Grid } from "@mui/material";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import CoverLayout from "layouts/authentication/components/CoverLayout";
+import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 import SignUpForm from "../components/SingUpForm";
 import GoogleLoginButton from "../components/GoogleLoginButton";
-import bgImage from "assets/images/bg-sign-up-cover.jpeg";
 import ViewTypes from "../../../constants/viewTypes";
-const RegisterPage = () => {
+
+function RegisterPage() {
   return (
     <CoverLayout image={bgImage}>
       <Card>
@@ -41,6 +42,6 @@ const RegisterPage = () => {
       </Card>
     </CoverLayout>
   );
-};
+}
 
 export default RegisterPage;

@@ -30,7 +30,7 @@ function ShareButton({ url, title = "Mira este enlace" }) {
 
     switch (platform) {
       case "whatsapp":
-        shareUrl = `https://wa.me/?text=${encodeURIComponent(title + " " + url)}`;
+        shareUrl = `https://wa.me/?text=${encodeURIComponent(`${title} ${url}`)}`;
         break;
       case "facebook":
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
@@ -120,6 +120,9 @@ function ShareButton({ url, title = "Mira este enlace" }) {
 ShareButton.propTypes = {
   url: PropTypes.string.isRequired,
   title: PropTypes.string,
+};
+ShareButton.defaultProps = {
+  title: "Mira este enlace",
 };
 
 export default ShareButton;

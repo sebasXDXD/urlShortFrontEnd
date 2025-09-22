@@ -1,23 +1,19 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import Card from "@mui/material/Card";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
-import MuiLink from "@mui/material/Link";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GitHubIcon from "@mui/icons-material/GitHub";
-import GoogleIcon from "@mui/icons-material/Google";
 import MDBox from "components/MDBox";
 import MDTypography from "components/MDTypography";
 import MDInput from "components/MDInput";
 import MDButton from "components/MDButton";
 import BasicLayout from "layouts/authentication/components/BasicLayout";
 import bgImage from "assets/images/bg-sign-in-basic.jpeg";
-import { login } from "../../../services/login";
 import { useAuth } from "providers/AuthProvider"; // Importa useAuth
+import { login } from "../../../services/login";
 import GoogleLoginButton from "../components/GoogleLoginButton";
 import ViewTypes from "../../../constants/viewTypes";
+
 function Basic() {
   const navigate = useNavigate();
   const { login: authLogin, isAuthenticated } = useAuth();
