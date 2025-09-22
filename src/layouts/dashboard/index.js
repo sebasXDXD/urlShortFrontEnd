@@ -13,8 +13,8 @@ import ReportsLineChart from "examples/Charts/LineCharts/ReportsLineChart";
 import ComplexStatisticsCard from "examples/Cards/StatisticsCards/ComplexStatisticsCard";
 
 // Dashboard components
-import Projects from "layouts/dashboard/components/Projects";
-import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
+// import Projects from "layouts/dashboard/components/Projects";
+// import OrdersOverview from "layouts/dashboard/components/OrdersOverview";
 import LinksSummaryCard from "layouts/dashboard/components/LinksSummaryCard";
 import RecentLinksTable from "layouts/dashboard/components/RecentLinksTable";
 
@@ -210,7 +210,7 @@ function Dashboard() {
         </MDBox>
 
         {/* --- Resto dashboard */}
-        <MDBox mt={4}>
+        {/* <MDBox mt={4}>
           <Grid container spacing={3}>
             <Grid item xs={12} md={6} lg={8}>
               <Projects />
@@ -219,7 +219,7 @@ function Dashboard() {
               <OrdersOverview />
             </Grid>
           </Grid>
-        </MDBox>
+        </MDBox> */}
       </MDBox>
       <Footer />
     </DashboardLayout>
