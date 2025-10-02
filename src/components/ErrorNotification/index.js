@@ -36,8 +36,13 @@ function ErrorNotification({ error, onClose }) {
 }
 
 ErrorNotification.propTypes = {
-  error: PropTypes.string.isRequired,
-  onClose: PropTypes.func.isRequired,
+  error: PropTypes.string,
+  onClose: PropTypes.func,
+};
+
+ErrorNotification.defaultProps = {
+  error: null,
+  onClose: () => {},
 };
 
 export default ErrorNotification;

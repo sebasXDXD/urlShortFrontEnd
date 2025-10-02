@@ -3,7 +3,6 @@ import { register } from "../services/register";
 
 const userRegister = () => {
   const [error, setError] = useState(null);
-  const [registrationSuccess, setRegistrationSuccess] = useState(false);
 
   const isValidEmail = (email) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -15,32 +14,30 @@ const userRegister = () => {
 
     if (!isValidEmail(email)) {
       setError("El correo electrónico no es válido");
-      return false;
+      return null;
     }
     if (email !== confirmEmail) {
       setError("Los correos electrónicos no coinciden");
-      return false;
+      return null;
     }
     if (password !== confirmPassword) {
       setError("Las contraseñas no coinciden");
-      return false;
+      return null;
     }
+
     try {
-      await register(userData);
-      setRegistrationSuccess(true);
-      return true;
+      const result = await register(userData); // ahora trae {status, data}
+      return result;
     } catch (err) {
       setError("Error al registrarse. Inténtalo de nuevo más tarde.");
-      return false;
+      return null;
     }
   };
 
   return {
     error,
-    registrationSuccess,
     handleSignUp,
     setError,
-    setRegistrationSuccess,
   };
 };
 

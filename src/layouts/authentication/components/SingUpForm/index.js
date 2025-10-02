@@ -1,12 +1,13 @@
-// components/SignUpForm.js
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import MDBox from "../../../../components/MDBox";
 import MDInput from "../../../../components/MDInput";
 import MDButton from "../../../../components/MDButton";
 import MDTypography from "../../../../components/MDTypography";
 import ErrorNotification from "../../../../components/ErrorNotification";
 import userRegister from "../../../../customHooks/userRegister";
+import { login } from "../../../../services/login"; // mismo login de SignIn
+import { useAuth } from "../../../../providers/AuthProvider"; // para guardar token
 
 function SignUpForm() {
   const [firstName, setFirstName] = useState("");
@@ -18,6 +19,8 @@ function SignUpForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   const { error, handleSignUp, setError } = userRegister();
+  const { login: authLogin } = useAuth(); // usamos el contexto de auth
+  const navigate = useNavigate();
 
   const handleFormSubmit = async () => {
     const userData = {
@@ -30,9 +33,17 @@ function SignUpForm() {
       confirmPassword,
     };
 
-    const success = await handleSignUp(userData);
-    if (success) {
-      alert("Registro exitoso");
+    const result = await handleSignUp(userData);
+
+    if (result && (result.status === 200 || result.status === 201)) {
+      try {
+        // login automático
+        const response = await login(email, password);
+        authLogin(response.token);
+        navigate("/links");
+      } catch (err) {
+        console.error("Error en login automático después del registro:", err);
+      }
     }
   };
 
@@ -132,7 +143,7 @@ function SignUpForm() {
             fontWeight="medium"
             textGradient
           >
-            Sign up
+            Sign in
           </MDTypography>
         </MDTypography>
       </MDBox>
