@@ -11,7 +11,7 @@ const getFaviconUrl = (url) => {
   }
 };
 
-function LinkIconComponent({ url, size = 32 }) {
+function LinkIconComponent({ url, size }) {
   const faviconUrl = getFaviconUrl(url);
 
   return faviconUrl ? (
@@ -21,7 +21,7 @@ function LinkIconComponent({ url, size = 32 }) {
         width: size,
         height: size,
         borderRadius: 0,
-        mr: 1, // Espacio a la derecha
+        mr: 1,
       }}
     />
   ) : (
@@ -30,7 +30,7 @@ function LinkIconComponent({ url, size = 32 }) {
       sx={{
         width: size,
         height: size,
-        mr: 1, // Espacio a la derecha
+        mr: 1,
       }}
     />
   );
@@ -38,7 +38,11 @@ function LinkIconComponent({ url, size = 32 }) {
 
 LinkIconComponent.propTypes = {
   url: PropTypes.string.isRequired,
-  size: PropTypes.number.isRequired,
+  size: PropTypes.number,
+};
+
+LinkIconComponent.defaultProps = {
+  size: 32,
 };
 
 export default LinkIconComponent;

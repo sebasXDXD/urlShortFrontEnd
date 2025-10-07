@@ -1,4 +1,5 @@
 // src/services/links.js
+import logger from "utils/logger";
 import axiosInstance from "./axiosInstance";
 
 // Obtener todos los links
@@ -6,7 +7,17 @@ const getLinks = async () => {
   const response = await axiosInstance.get("/links");
   return response.data;
 };
+const getUserLinks = async (token) => {
+  const response = await axiosInstance.get("/user/links", {
+    headers: {
+      Authorization: `Bearer ${token}`, // 👈 enviamos el token
+    },
+  });
 
+  logger.info("🔗 Respuesta backend getUserLinks:", response.data);
+
+  return response.data;
+};
 // Obtener un link por shortcode o slug
 const getLink = async (link) => {
   const response = await axiosInstance.get(`/link/${link}`);
@@ -86,4 +97,5 @@ export {
   getTopLinks,
   getLinksCreatedByMonth,
   getRecentLinks,
+  getUserLinks,
 };

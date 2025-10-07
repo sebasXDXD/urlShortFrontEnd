@@ -113,8 +113,8 @@ Footer.propTypes = {
   company: PropTypes.objectOf(PropTypes.string),
   links: PropTypes.arrayOf(
     PropTypes.shape({
-      label: PropTypes.string.isRequired,
-      url: PropTypes.string.isRequired,
+      name: PropTypes.string.isRequired,
+      href: PropTypes.string.isRequired,
     })
   ),
 };

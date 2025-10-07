@@ -16,7 +16,7 @@ import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import Footer from "examples/Footer";
 import LinkIconComponent from "components/LinkIcon";
 import LaunchIcon from "@mui/icons-material/Launch";
-import { getLinks } from "../../services/links";
+import { getUserLinks } from "../../services/links";
 import EditLink from "./EditLink";
 import ShareButton from "./shareButton";
 import CreateLink from "./CreateLink";
@@ -48,7 +48,7 @@ function Links() {
 
   const fetchData = async () => {
     try {
-      const data = await getLinks();
+      const data = await getUserLinks();
       setLinksData(data);
       return data;
     } catch (error) {
@@ -241,7 +241,13 @@ function Links() {
         </Grid>
       </MDBox>
 
-      <Footer />
+      <Footer
+        links={[
+          { name: "Acerca de", href: "/about" },
+          { name: "Contacto", href: "/contact" },
+        ]}
+      />
+
       <CreateLink open={open} handleClose={handleClose} onLinkCreated={fetchData} />
       <EditLink
         open={editOpen}
